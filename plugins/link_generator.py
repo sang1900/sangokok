@@ -3,6 +3,7 @@ from pyrogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton
 from bot import Bot
 from config import ADMINS
 from helper_func import encode, get_message_id
+import requests
 
 @Bot.on_message(filters.private & filters.command('files'))
 async def batch(client: Client, message: Message):
