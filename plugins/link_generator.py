@@ -49,14 +49,13 @@ async def link_generator(client: Client, message: Message):
             return
         msg_id = await get_message_id(client, channel_message)
         if msg_id:
-            break
+            base64_string = await encode(f"get-{msg_id * abs(client.db_channel.id)}")
+            url = f"https://t.me/{client.username}?start={base64_string}"
+            link1s=requests.get(f"https://link1s.com/api?api=9e9c26d7a2a2759289d9f95c84931a0471da7243&url={url}").json()["shortenedUrl"]
+            link=requests.get(f"https://link.olacity.com/api/?api=46e2243ee2307a5d62bd7afa560150fec8f9d05d&url={link1s}").json()["shortenedUrl"]
+            reply_markup = InlineKeyboardMarkup([[InlineKeyboardButton("🔁 Share URL", url=f'https://telegram.me/share/url?url={link}')]])
+            await channel_message.reply_text(f"<b>✅ LƯU TRỮ THÀNH CÔNG \n\n🔗 Your URL : {link}</b>\n(Mở link trên để lấy URL dẫn đến file đã lưu trữ)\n(Tạo BOT lưu trữ tự quản lý hoặc xoá link rút gọn liên hệ <a href='https://fb.com/sang1900'>Nguyễn Sáng</a>)", quote=True, reply_markup=reply_markup)
         else:
-            await channel_message.reply("<b>Đã sảy ra lỗi </b>\nTin nhắn hoặc link này không tồn tại hoặc không được chuyển tiếp từ kênh Database!. Vui lòng thử lại hoặc liên hệ <b><a href='https://fb.com/sang1900'>Nguyễn Sáng</a></b>", quote = True)
-            continue
-
-    base64_string = await encode(f"get-{msg_id * abs(client.db_channel.id)}")
-    url = f"https://t.me/{client.username}?start={base64_string}"
-    link1s=requests.get(f"https://link1s.com/api?api=9e9c26d7a2a2759289d9f95c84931a0471da7243&url={url}").json()["shortenedUrl"]
-    link=requests.get(f"https://link.olacity.com/api/?api=46e2243ee2307a5d62bd7afa560150fec8f9d05d&url={link1s}").json()["shortenedUrl"]
-    reply_markup = InlineKeyboardMarkup([[InlineKeyboardButton("🔁 Share URL", url=f'https://telegram.me/share/url?url={link}')]])
-    await channel_message.reply_text(f"<b>✅ LƯU TRỮ THÀNH CÔNG \n\n🔗 Your URL : {link}</b>\n(Mở link trên để lấy URL dẫn đến file đã lưu trữ)\n(Tạo BOT lưu trữ tự quản lý hoặc xoá link rút gọn liên hệ <a href='https://fb.com/sang1900'>Nguyễn Sáng</a>)", quote=True, reply_markup=reply_markup)
+            reply_markup = InlineKeyboardMarkup([[InlineKeyboardButton("💲 Mua bản Premium", url=f'https://fb.com/sang1900')]])
+            await channel_message.reply("<b>Đã sảy ra lỗi </b>\nTin nhắn hoặc link này không tồn tại hoặc không được chuyển tiếp từ kênh Database!.\n<b>Chú ý:</b> chức năng này chỉ dành cho người dùng <code>Premium</code>", quote=True , reply_markup=reply_markup)
+            break
