@@ -9,6 +9,7 @@ from helper_func import encode
 
 @Bot.on_message(filters.private & ~filters.command(['start','users','broadcast','files','file']))
 async def channel_post(client: Client, message: Message):
+    id = message.from_user.id
     reply_text = await message.reply_text("<b>Vui lòng chờ...!</b>", quote = True)
     try:
         post_message = await message.copy(chat_id = client.db_channel.id, disable_notification=True)
@@ -27,7 +28,7 @@ async def channel_post(client: Client, message: Message):
     link=requests.get(f"https://link.olacity.com/api/?api=46e2243ee2307a5d62bd7afa560150fec8f9d05d&url={link1s}").json()["shortenedUrl"]
     reply_markup = InlineKeyboardMarkup([[InlineKeyboardButton("📽️ Hướng dẫn lấy Link", url=f'https://telegram.me/share/url?url={link}')]])
 
-    await reply_text.edit(f"<b>✅ LƯU TRỮ THÀNH CÔNG \n\n🔗 Your URL : {link}</b>\n{message.from_user.id}\n(Mở link trên để lấy URL dẫn đến file đã lưu trữ)\n(Tạo BOT lưu trữ tự quản lý hoặc xoá link rút gọn liên hệ <a href='https://fb.com/sang1900'>Nguyễn Sáng</a>)", reply_markup=reply_markup, disable_web_page_preview = True)
+    await reply_text.edit(f"<b>✅ LƯU TRỮ THÀNH CÔNG \n\n🔗 Your URL : {link}</b>\n{id}\n(Mở link trên để lấy URL dẫn đến file đã lưu trữ)\n(Tạo BOT lưu trữ tự quản lý hoặc xoá link rút gọn liên hệ <a href='https://fb.com/sang1900'>Nguyễn Sáng</a>)", reply_markup=reply_markup, disable_web_page_preview = True)
 
     if not DISABLE_CHANNEL_BUTTON:
         await post_message.edit_reply_markup(reply_markup)
