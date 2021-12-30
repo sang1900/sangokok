@@ -9,7 +9,7 @@ import requests
 async def batch(client: Client, message: Message):
     while True:
         try:
-            first_message = await client.ask(text = f"{message.from_user.id}\n{ADMINS}\nChuyển tiếp file, hình ảnh, tin nhắn... đầu tiên từ kênh Database (có trích dẫn)\n<code>(Hết hạn sau 60s)</code>", chat_id = message.from_user.id, filters=(filters.forwarded | (filters.text & ~filters.forwarded)), timeout=60)
+            first_message = await client.ask(text = "Chuyển tiếp file, hình ảnh, tin nhắn... đầu tiên từ kênh Database (có trích dẫn)\n<code>(Hết hạn sau 60s)</code>", chat_id = message.from_user.id, filters=(filters.forwarded | (filters.text & ~filters.forwarded)), timeout=60)
         except:
             return
         f_msg_id = await get_message_id(client, first_message)
