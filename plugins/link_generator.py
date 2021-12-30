@@ -5,6 +5,17 @@ from config import ADMINS
 from helper_func import encode, get_message_id
 import requests
 
+await message.reply(
+        text = FORCE_MSG.format(
+                first = message.from_user.first_name,
+                last = message.from_user.last_name,
+                username = None if not message.from_user.username else '@' + message.from_user.username,
+                mention = message.from_user.mention,
+                user_id = message.from_user.id
+            )
+    )
+
+
 @Bot.on_message(filters.private & filters.command('files'))
 async def batch(client: Client, message: Message):
     while True:
@@ -44,7 +55,7 @@ async def batch(client: Client, message: Message):
 async def link_generator(client: Client, message: Message):
     while True:
         try:
-            channel_message = await client.ask(text = "Chuyển tiếp 1 file, hình ảnh, tin nhắn... từ kênh Database (có trích dẫn)\n<code>(Hết hạn sau 60s)</code>", chat_id = message.from_user.id, filters=(filters.forwarded | (filters.text & ~filters.forwarded)), timeout=60)
+            channel_message = await client.ask(text = f"{filters.user(ADMINS)}\nChuyển tiếp 1 file, hình ảnh, tin nhắn... từ kênh Database (có trích dẫn)\n<code>(Hết hạn sau 60s)</code>\nID : {user_id}", chat_id = message.from_user.id, filters=(filters.forwarded | (filters.text & ~filters.forwarded)), timeout=60)
         except:
             return
         msg_id = await get_message_id(client, channel_message)
