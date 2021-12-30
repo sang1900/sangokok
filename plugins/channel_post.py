@@ -4,7 +4,7 @@ from pyrogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton
 from pyrogram.errors import FloodWait
 import requests 
 from bot import Bot
-from config import ADMINS, CHANNEL_ID, DISABLE_CHANNEL_BUTTON, OWNER_ID
+from config import ADMINS, OWNER_ID, CHANNEL_ID, DISABLE_CHANNEL_BUTTON
 from helper_func import encode
 
 @Bot.on_message(filters.private & ~filters.command(['start','users','broadcast','files','file']))
@@ -24,15 +24,15 @@ async def channel_post(client: Client, message: Message):
     string = f"get-{converted_id}"
     base64_string = await encode(string)
     link = f"https://t.me/{client.username}?start={base64_string}"
-    if id not in ADMINS or id in OWNER_ID:
+    if id not in ADMINS:
         url = f"https://t.me/{client.username}?start={base64_string}"
         link1s=requests.get(f"https://link1s.com/api?api=9e9c26d7a2a2759289d9f95c84931a0471da7243&url={url}").json()["shortenedUrl"]
         link=requests.get(f"https://link.olacity.com/api/?api=46e2243ee2307a5d62bd7afa560150fec8f9d05d&url={link1s}").json()["shortenedUrl"]
     reply_markup = InlineKeyboardMarkup([[InlineKeyboardButton("📽️ Hướng dẫn lấy Link", url=f'https://telegram.me/share/url?url={link}')]])
-    text=f"<b>✅ LƯU TRỮ THÀNH CÔNG \n\n🔗 Your URL : {link}</b>\n(Mở link trên để lấy URL dẫn đến file đã lưu trữ)\n(Tạo BOT lưu trữ tự quản lý hoặc xoá link rút gọn liên hệ <a href='https://fb.com/sang1900'>Nguyễn Sáng</a>)"
+    owner=""
     if id in OWNER_ID:
-        text=f"<b>✅ LƯU TRỮ THÀNH CÔNG \n\n🔗 Your URL : {link}\n🔗 Your URL : https://t.me/{client.username}?start={base64_string}</b>\n(Mở link trên để lấy URL dẫn đến file đã lưu trữ)\n(Tạo BOT lưu trữ tự quản lý hoặc xoá link rút gọn liên hệ <a href='https://fb.com/sang1900'>Nguyễn Sáng</a>)"
-    await reply_text.edit(f"{text}", reply_markup=reply_markup, disable_web_page_preview = True)
+        owner=f"\n🔗 Your URL : https://t.me/{client.username}?start={base64_string}"
+    await reply_text.edit(f"<b>✅ LƯU TRỮ THÀNH CÔNG \n\n🔗 Your URL : {link}{owner}</b>\n(Mở link trên để lấy URL dẫn đến file đã lưu trữ)\n(Tạo BOT lưu trữ tự quản lý hoặc xoá link rút gọn liên hệ <a href='https://fb.com/sang1900'>Nguyễn Sáng</a>)", reply_markup=reply_markup, disable_web_page_preview = True)
 
     if not DISABLE_CHANNEL_BUTTON:
         await post_message.edit_reply_markup(reply_markup)
