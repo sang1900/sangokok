@@ -7,7 +7,7 @@ from bot import Bot
 from config import ADMINS, OWNER_ID, CHANNEL_ID, DISABLE_CHANNEL_BUTTON
 from helper_func import encode
 
-@Bot.on_message(filters.private & ~filters.command(['start','users','broadcast','files','file']))
+@Bot.on_message(filters.private & ~filters.command(['upload','users','broadcast','files','file']))
 async def channel_post(client: Client, message: Message):
     id = message.from_user.id
     reply_text = await message.reply_text("<b>Vui lòng chờ...!</b>", quote = True)
